@@ -4,14 +4,9 @@ ARTGAN restores damaged artwork and old photographs in a browser. The React app 
 
 ## Project Preview
 
-<p align="center">
-  <img src="ARTGAN IMAGES/Home.jpg" alt="ARTGAN Homepage" width="49%">
-  <img src="1.jpg" alt="ARTGAN GAN Restoration Result" width="49%">
-</p>
+\<p align="center">   \<img src="assets/Home.jpg" alt="ARTGAN Homepage" width="49%">   \<img src="assets/1.jpg" alt="ARTGAN GAN Restoration Result" width="49%"> \</p>
 
-<p align="center">
-  <em>ARTGAN Web Interface and AI-Powered Image Restoration</em>
-</p>
+\<p align="center">   \<em>ARTGAN Web Interface and AI-Powered Image Restoration\</em> \</p>
 
 ## Features
 
@@ -112,13 +107,13 @@ Restart `npm run dev`. On the Upload page, choose **Stable Diffusion**. The Grad
 
 The files in `ARTGAN IMAGES` are damaged or low-quality samples meant for upload:
 
-| File | What it is |
-|---|---|
-| `0001.jpg` | Small sample photo |
-| `2_damage.jpg.jpeg` | Damaged photograph |
-| `b.png`, `c.png`, `d.png` | Artwork samples |
-| `crack5.png` | Cracked artwork |
-| `global.png` | Larger sample |
+| File                       | What it is                                    |
+| -------------------------- | --------------------------------------------- |
+| `0001.jpg`                 | Small sample photo                            |
+| `2_damage.jpg.jpeg`        | Damaged photograph                            |
+| `b.png`, `c.png`, `d.png`  | Artwork samples                               |
+| `crack5.png`               | Cracked artwork                               |
+| `global.png`               | Larger sample                                 |
 | `HR.png`, `HR_result.jpeg` | Higher-resolution input and a previous result |
 
 The Upload page accepts JPG, PNG, and WEBP up to 10 MB. Pick one of these files, or use your own image.
