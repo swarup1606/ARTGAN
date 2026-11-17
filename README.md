@@ -1,135 +1,292 @@
 # ARTGAN – AI-Powered Artwork Restoration
 
-ARTGAN restores damaged artwork and old photographs in a browser. The React app is the interface. The AI models run in Google Colab because they require GPU resources.
+ARTGAN is an AI-powered web application designed to restore damaged artwork and old photographs using deep learning and generative AI techniques.
+
+The React application provides the user interface, while the AI models run in Google Colab because they require GPU resources.
 
 ## Project Preview
 
-\<p align="center">   \<img src="assets/Home.jpg" alt="ARTGAN Homepage" width="49%">   \<img src="assets/1.jpg" alt="ARTGAN GAN Restoration Result" width="49%"> \</p>
+<p align="center">
+  <img src="assets/Home.jpg" alt="ARTGAN Homepage" width="49%">
+  <img src="assets/1.jpg" alt="ARTGAN Image Restoration Result" width="49%">
+</p>
 
-\<p align="center">   \<em>ARTGAN Web Interface and AI-Powered Image Restoration\</em> \</p>
+<p align="center">
+  <em>ARTGAN – AI-Powered Artwork and Old Photo Restoration</em>
+</p>
 
 ## Features
 
-Two restoration modes are included:
+ARTGAN includes two AI-powered restoration modes:
 
-- **GAN Restoration:** Uses Microsoft's [Bringing Old Photos Back to Life](https://github.com/microsoft/Bringing-Old-Photos-Back-to-Life). The notebook serves it through FastAPI and a temporary ngrok URL. The website uploads an image and displays the restored result.
-- **Stable Diffusion:** Uses `runwayml/stable-diffusion-inpainting` in a Gradio app. Choosing this mode opens that app inside the website.
+- **GAN-Based Restoration:** Uses Microsoft's [Bringing Old Photos Back to Life](https://github.com/microsoft/Bringing-Old-Photos-Back-to-Life) pretrained restoration approach. The Google Colab notebook serves the model through FastAPI and a temporary ngrok URL. Users can upload an image through the website and view the restored result.
 
-Sample photos live in the [`ARTGAN IMAGES`](ARTGAN%20IMAGES) folder. Use them to try an upload before using your own files.
+- **Stable Diffusion Restoration:** Uses the `runwayml/stable-diffusion-inpainting` model through a Gradio application. Selecting this mode opens the Gradio interface inside the website, where users can upload images and perform AI-powered inpainting and restoration.
+
+- **Image Upload:** Upload damaged photographs and artwork through an interactive web interface.
+
+- **Image Preview:** Preview uploaded images before starting the restoration process.
+
+- **Download Restored Images:** Download the resulting GAN-restored image from the website.
+
+## Technology Stack
+
+| Category | Technologies |
+|---|---|
+| Frontend | React.js, Vite |
+| Backend | Python, FastAPI |
+| Deep Learning | PyTorch |
+| Restoration | GAN, Stable Diffusion |
+| AI Interface | Gradio |
+| GPU Environment | Google Colab |
+| API Tunneling | ngrok |
 
 ## Requirements
 
-- [Node.js](https://nodejs.org/) 18 or newer
-- A Google account that can run a Colab **GPU** runtime (T4 is enough)
-- A free [ngrok](https://dashboard.ngrok.com/signup) account, for the GAN API
-- A [Hugging Face](https://huggingface.co/) account, for the Stable Diffusion weights
+Before running ARTGAN, make sure you have:
 
-The website can run on your computer. The notebooks need a Colab GPU to run effectively.
+- [Node.js](https://nodejs.org/) version 18 or newer.
+- A Google account that can run a Google Colab **GPU runtime** (T4 is sufficient).
+- A free [ngrok](https://dashboard.ngrok.com/signup) account for the GAN API.
+- A [Hugging Face](https://huggingface.co/) account for accessing Stable Diffusion model weights.
 
-## Repository Layout
+**Note:** The frontend can run locally on your computer. The AI restoration notebooks require a Colab GPU runtime to execute effectively.
+
+## Repository Structure
 
 ```text
 ARTGAN/
+│
 ├── assets/
-│   ├── homepage.png
-│   └── restoration-result.png
-├── frontend/                 React + Vite website
-├── LatestGAN.ipynb           GAN restoration API (Colab)
-├── Stable_Diffusion.ipynb    Stable Diffusion Gradio app (Colab)
-└── ARTGAN IMAGES/            Sample photos for upload
+│   ├── Home.jpg
+│   └── 1.jpg
+│
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   └── ...
+│
+├── LatestGAN.ipynb
+├── Stable_Diffusion.ipynb
+│
+├── ARTGAN IMAGES/
+│   ├── 0001.jpg
+│   ├── 2_damage.jpg.jpeg
+│   ├── b.png
+│   ├── c.png
+│   ├── d.png
+│   ├── crack5.png
+│   ├── global.png
+│   ├── HR.png
+│   └── HR_result.jpeg
+│
+└── README.md
 ```
 
-## 1. Run the Website
+## Installation and Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/swarup1606/ARTGAN.git
+```
+
+Navigate into the project directory:
+
+```bash
+cd ARTGAN
+```
+
+### 2. Run the Frontend
+
+Navigate to the frontend directory:
 
 ```bash
 cd frontend
-cp .env.example .env
-npm install
-npm run dev
 ```
 
-On Windows PowerShell:
+Create the environment file:
+
+```bash
+cp .env.example .env
+```
+
+For Windows PowerShell, use:
 
 ```powershell
-cd frontend
 Copy-Item .env.example .env
+```
+
+Install the dependencies:
+
+```bash
 npm install
+```
+
+Start the development server:
+
+```bash
 npm run dev
 ```
 
-Open the local address Vite prints, usually `http://localhost:5173`.
-
-Leave `.env` empty until the Colab notebooks print their public URLs. After you paste those URLs, stop the dev server and run `npm run dev` again. Vite only reads `.env` at startup.
-
-`.env` is listed in `.gitignore`. Do not commit it.
-
-## 2. Start the GAN API
-
-1. Open [Google Colab](https://colab.research.google.com) and upload `LatestGAN.ipynb`.
-2. Set the runtime to **GPU**: Runtime → Change runtime type → T4 GPU.
-3. In the last code cell, replace `YOUR_NGROK_AUTHTOKEN` with the token from [ngrok authtoken](https://dashboard.ngrok.com/get-started/your-authtoken). Keep that token in the Colab notebook only. Do not commit it.
-4. Run the cells from the top, in order, through the checkpoint check and the two cells marked `FIX`. Those cells mount Google Drive, clone the Microsoft repository into `MyDrive/OldPhotoRestoreProject`, install dependencies, and download the model files.
-5. Skip the cell that calls `files.upload()` unless you want to test a single image inside Colab. That cell waits for a manual upload and will stop a "Run all".
-6. Run the cell that installs `pyngrok`, `fastapi`, and `uvicorn`.
-7. Run the final cell, **Old Photo Restoration | FastAPI + ngrok Server**. Leave that cell running.
-
-The cell prints a line like:
+Open the local URL provided by Vite, usually:
 
 ```text
-API URL: https://something.ngrok-free.dev
+http://localhost:5173
 ```
 
-Put that URL in `frontend/.env`:
+Keep the environment variables empty until the Google Colab notebooks generate their public URLs.
+
+After adding the URLs, restart the development server because Vite reads environment variables when it starts.
+
+**Important:** The `.env` file is included in `.gitignore`. Do not upload it to GitHub.
+
+## 3. Configure and Start GAN Restoration
+
+The GAN restoration feature uses Microsoft's pretrained old photo restoration model.
+
+Follow these steps:
+
+1. Open [Google Colab](https://colab.research.google.com/).
+2. Upload `LatestGAN.ipynb` from the repository.
+3. Select **Runtime → Change runtime type → T4 GPU**.
+4. In the final code cell, replace `YOUR_NGROK_AUTHTOKEN` with your ngrok authentication token from the [ngrok dashboard](https://dashboard.ngrok.com/get-started/your-authtoken).
+5. Keep the token private and do not commit it to GitHub.
+6. Execute the notebook cells from top to bottom, including the checkpoint checks and the two cells marked `FIX`.
+7. These cells mount Google Drive, clone the Microsoft restoration repository into `MyDrive/OldPhotoRestoreProject`, install the dependencies, and download the required model files.
+8. Skip the cell that calls `files.upload()` unless you want to test an individual image directly in Colab.
+9. Run the cell that installs `pyngrok`, `fastapi`, and `uvicorn`.
+10. Execute the final cell titled **Old Photo Restoration | FastAPI + ngrok Server**.
+
+Keep the final cell running.
+
+The notebook generates a public API URL similar to:
 
 ```text
+https://something.ngrok-free.dev
+```
+
+Add this URL to `frontend/.env`:
+
+```env
 VITE_GAN_URL=https://something.ngrok-free.dev
 ```
 
-Restart `npm run dev`. On the Upload page, choose **GAN (Fast)** and click **Start Restoration**. The first image can take about 30 to 60 seconds.
+Restart the frontend development server:
 
-The ngrok address changes every time you restart Colab. Update `.env` when it changes. Closing the notebook or letting Colab disconnect stops the API.
+```bash
+npm run dev
+```
 
-## 3. Start Stable Diffusion
+Now open the Upload page, select **GAN (Fast)**, upload an image, and click **Start Restoration**.
 
-1. Upload `Stable_Diffusion.ipynb` to a second Colab session with a GPU runtime. One free Colab GPU session is often all you can keep open, so you may need to stop the GAN notebook first.
-2. Run all cells. The first cell installs the pinned `diffusers` and `transformers` versions. The next cell loads `runwayml/stable-diffusion-inpainting` and starts Gradio with a public link.
-3. If Hugging Face refuses the download, open the model page, accept its license, then log in from Colab with a [Hugging Face access token](https://huggingface.co/settings/tokens).
+The first restoration may take approximately 30–60 seconds.
 
-Gradio prints a link such as `https://something.gradio.live`. Put it in `frontend/.env`:
+**Important:** The ngrok URL changes whenever you restart the Colab session. Update the environment variable accordingly. The API stops working when the notebook disconnects or the server cell stops.
+
+## 4. Configure and Start Stable Diffusion
+
+ARTGAN also includes a Stable Diffusion-based restoration interface using the `runwayml/stable-diffusion-inpainting` model.
+
+Follow these steps:
+
+1. Open a second Google Colab session.
+2. Upload `Stable_Diffusion.ipynb`.
+3. Select a GPU runtime.
+4. Run the notebook cells in order.
+5. The notebook installs the required pinned versions of `diffusers` and `transformers`.
+6. The model is loaded and a Gradio application is launched.
+
+If Hugging Face denies access to the model weights:
+
+- Visit the [Stable Diffusion Inpainting model page](https://huggingface.co/runwayml/stable-diffusion-inpainting).
+- Accept the model license if required.
+- Generate a [Hugging Face access token](https://huggingface.co/settings/tokens).
+- Authenticate from your Colab notebook.
+
+Once the Gradio application starts, Colab generates a public URL similar to:
 
 ```text
+https://something.gradio.live
+```
+
+Add the URL to `frontend/.env`:
+
+```env
 VITE_SD_GRADIO_URL=https://something.gradio.live
 ```
 
-Restart `npm run dev`. On the Upload page, choose **Stable Diffusion**. The Gradio app opens in a window. Upload the image there and use its Generate control. That share link expires after about a week, and it dies as soon as the Colab session stops.
+Restart the frontend:
 
-## Try It With the Sample Images
+```bash
+npm run dev
+```
 
-The files in `ARTGAN IMAGES` are damaged or low-quality samples meant for upload:
+Open the Upload page and select **Stable Diffusion (High Quality)**.
 
-| File                       | What it is                                    |
-| -------------------------- | --------------------------------------------- |
-| `0001.jpg`                 | Small sample photo                            |
-| `2_damage.jpg.jpeg`        | Damaged photograph                            |
-| `b.png`, `c.png`, `d.png`  | Artwork samples                               |
-| `crack5.png`               | Cracked artwork                               |
-| `global.png`               | Larger sample                                 |
-| `HR.png`, `HR_result.jpeg` | Higher-resolution input and a previous result |
+The Gradio application opens inside the website. Upload an image and use its Generate control to perform restoration.
 
-The Upload page accepts JPG, PNG, and WEBP up to 10 MB. Pick one of these files, or use your own image.
+**Important:** The Gradio share link is temporary and expires after approximately one week. It also stops working when the Colab session ends.
 
-## What to Expect
+Free Colab GPU availability may limit running both restoration notebooks simultaneously. You may need to stop one session before starting the other.
 
-- GAN restoration is requested from this website and the restored image is shown on the same page.
-- Stable Diffusion restoration happens inside the Gradio window.
-- Both backends must stay running in Colab while you use them.
-- A GPU runtime is required. CPU runtimes will fail or be too slow to be useful.
+## 5. Try the Application with Sample Images
 
-## Security
+The repository includes sample photographs and artwork in the `ARTGAN IMAGES` directory.
 
-Never commit an ngrok token, a Hugging Face token, or `frontend/.env`. If a token was saved in a notebook, chat, or screenshot, revoke it in the ngrok or Hugging Face dashboard and create a new one.
+You can use these files to test the restoration features:
 
-## Credits
+| Filename | Description |
+|---|---|
+| `0001.jpg` | Small sample photograph |
+| `2_damage.jpg.jpeg` | Damaged photograph |
+| `b.png` | Artwork sample |
+| `c.png` | Artwork sample |
+| `d.png` | Artwork sample |
+| `crack5.png` | Cracked artwork |
+| `global.png` | Larger sample image |
+| `HR.png` | Higher-resolution input |
+| `HR_result.jpeg` | Previous restoration result |
 
-- GAN pipeline: [microsoft/Bringing-Old-Photos-Back-to-Life](https://github.com/microsoft/Bringing-Old-Photos-Back-to-Life)
-- Inpainting model: [runwayml/stable-diffusion-inpainting](https://huggingface.co/runwayml/stable-diffusion-inpainting)
+The website supports JPG, PNG, and WEBP formats, with a maximum upload size of 10 MB.
+
+You can also upload your own photographs or artwork.
+
+## 6. What to Expect
+
+- **GAN Restoration:** Image restoration is requested through the website, and the restored result is displayed on the same page.
+- **Stable Diffusion:** Image restoration and inpainting are performed through the embedded Gradio interface.
+- **GPU Requirement:** Both restoration backends require a working Google Colab GPU runtime.
+- **Backend Availability:** The respective Colab notebook and its public API or Gradio link must remain active while using the corresponding restoration feature.
+
+## 7. Security
+
+Keep your credentials and environment configuration secure.
+
+- Never commit your ngrok authentication token.
+- Never commit your Hugging Face access token.
+- Never upload `frontend/.env` to GitHub.
+- Keep authentication tokens inside private environment configurations or Colab secrets.
+- If a token is accidentally exposed, revoke it immediately and generate a new one.
+
+## Credits and References
+
+This project integrates existing open-source AI models and tools.
+
+- **GAN Restoration:** [Microsoft – Bringing Old Photos Back to Life](https://github.com/microsoft/Bringing-Old-Photos-Back-to-Life)
+- **Stable Diffusion Inpainting:** [RunwayML – Stable Diffusion Inpainting](https://huggingface.co/runwayml/stable-diffusion-inpainting)
+- **Frontend Framework:** [React](https://react.dev/)
+- **Backend Framework:** [FastAPI](https://fastapi.tiangolo.com/)
+- **AI Interface:** [Gradio](https://www.gradio.app/)
+- **GPU Environment:** [Google Colab](https://colab.research.google.com/)
+
+---
+
+<p align="center">
+  <b>ARTGAN – Restore the Past, Preserve the Future.</b>
+</p>
+
+<p align="center">
+  Developed with ❤️ using Artificial Intelligence and Deep Learning.
+</p>
