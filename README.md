@@ -6,7 +6,7 @@ ARTGAN restores damaged artwork and old photographs in a browser. The React app 
 
 <p align="center">
   <img src="ARTGAN IMAGES/Home.jpg" alt="ARTGAN Homepage" width="49%">
-  <img src="assets/restoration-result.png" alt="ARTGAN GAN Restoration Result" width="49%">
+  <img src="1.jpg" alt="ARTGAN GAN Restoration Result" width="49%">
 </p>
 
 <p align="center">
