@@ -1,13 +1,26 @@
-# ARTGAN
+# ARTGAN – AI-Powered Artwork Restoration
 
-ARTGAN restores damaged artwork and old photographs in a browser. The React app is the interface. The models run in Google Colab, because they need a GPU.
+ARTGAN restores damaged artwork and old photographs in a browser. The React app is the interface. The AI models run in Google Colab because they require GPU resources.
+
+## Project Preview
+
+<p align="center">
+  <img src="ARTGAN IMAGES/Home.jpg" alt="ARTGAN Homepage" width="49%">
+  <img src="assets/restoration-result.png" alt="ARTGAN GAN Restoration Result" width="49%">
+</p>
+
+<p align="center">
+  <em>ARTGAN Web Interface and AI-Powered Image Restoration</em>
+</p>
+
+## Features
 
 Two restoration modes are included:
 
-- **GAN** uses Microsoft's [Bringing Old Photos Back to Life](https://github.com/microsoft/Bringing-Old-Photos-Back-to-Life). The notebook serves it through FastAPI and a temporary ngrok URL. The website uploads an image and shows the restored result.
-- **Stable Diffusion** uses `runwayml/stable-diffusion-inpainting` in a Gradio app. Choosing this mode opens that app inside the website.
+- **GAN Restoration:** Uses Microsoft's [Bringing Old Photos Back to Life](https://github.com/microsoft/Bringing-Old-Photos-Back-to-Life). The notebook serves it through FastAPI and a temporary ngrok URL. The website uploads an image and displays the restored result.
+- **Stable Diffusion:** Uses `runwayml/stable-diffusion-inpainting` in a Gradio app. Choosing this mode opens that app inside the website.
 
-Sample photos live in [`ARTGAN IMAGES`](ARTGAN%20IMAGES). Use them to try an upload before using your own files.
+Sample photos live in the [`ARTGAN IMAGES`](ARTGAN%20IMAGES) folder. Use them to try an upload before using your own files.
 
 ## Requirements
 
@@ -16,19 +29,22 @@ Sample photos live in [`ARTGAN IMAGES`](ARTGAN%20IMAGES). Use them to try an upl
 - A free [ngrok](https://dashboard.ngrok.com/signup) account, for the GAN API
 - A [Hugging Face](https://huggingface.co/) account, for the Stable Diffusion weights
 
-The website can run on your computer. The notebooks cannot run usefully without a Colab GPU.
+The website can run on your computer. The notebooks need a Colab GPU to run effectively.
 
-## Repository layout
+## Repository Layout
 
-```
+```text
 ARTGAN/
+├── assets/
+│   ├── homepage.png
+│   └── restoration-result.png
 ├── frontend/                 React + Vite website
 ├── LatestGAN.ipynb           GAN restoration API (Colab)
 ├── Stable_Diffusion.ipynb    Stable Diffusion Gradio app (Colab)
 └── ARTGAN IMAGES/            Sample photos for upload
 ```
 
-## 1. Run the website
+## 1. Run the Website
 
 ```bash
 cd frontend
@@ -37,7 +53,7 @@ npm install
 npm run dev
 ```
 
-On Windows PowerShell, create the env file with:
+On Windows PowerShell:
 
 ```powershell
 cd frontend
@@ -55,7 +71,7 @@ Leave `.env` empty until the Colab notebooks print their public URLs. After you 
 ## 2. Start the GAN API
 
 1. Open [Google Colab](https://colab.research.google.com) and upload `LatestGAN.ipynb`.
-2. Set the runtime to **GPU**: Runtime, Change runtime type, T4 GPU.
+2. Set the runtime to **GPU**: Runtime → Change runtime type → T4 GPU.
 3. In the last code cell, replace `YOUR_NGROK_AUTHTOKEN` with the token from [ngrok authtoken](https://dashboard.ngrok.com/get-started/your-authtoken). Keep that token in the Colab notebook only. Do not commit it.
 4. Run the cells from the top, in order, through the checkpoint check and the two cells marked `FIX`. Those cells mount Google Drive, clone the Microsoft repository into `MyDrive/OldPhotoRestoreProject`, install dependencies, and download the model files.
 5. Skip the cell that calls `files.upload()` unless you want to test a single image inside Colab. That cell waits for a manual upload and will stop a "Run all".
@@ -92,12 +108,12 @@ VITE_SD_GRADIO_URL=https://something.gradio.live
 
 Restart `npm run dev`. On the Upload page, choose **Stable Diffusion**. The Gradio app opens in a window. Upload the image there and use its Generate control. That share link expires after about a week, and it dies as soon as the Colab session stops.
 
-## Try it with the sample images
+## Try It With the Sample Images
 
 The files in `ARTGAN IMAGES` are damaged or low-quality samples meant for upload:
 
 | File | What it is |
-| --- | --- |
+|---|---|
 | `0001.jpg` | Small sample photo |
 | `2_damage.jpg.jpeg` | Damaged photograph |
 | `b.png`, `c.png`, `d.png` | Artwork samples |
@@ -107,7 +123,7 @@ The files in `ARTGAN IMAGES` are damaged or low-quality samples meant for upload
 
 The Upload page accepts JPG, PNG, and WEBP up to 10 MB. Pick one of these files, or use your own image.
 
-## What to expect
+## What to Expect
 
 - GAN restoration is requested from this website and the restored image is shown on the same page.
 - Stable Diffusion restoration happens inside the Gradio window.
