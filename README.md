@@ -7,7 +7,7 @@ The React application provides the user interface, while the AI models run in Go
 ## Project Preview
 
 <p align="center">
-  <img src="assets/Home.jpg" alt="ARTGAN Homepage" width="49%">
+  <img src="assets/Home.png" alt="ARTGAN Homepage" width="49%">
   <img src="assets/1.jpg" alt="ARTGAN Image Restoration Result" width="49%">
 </p>
 
